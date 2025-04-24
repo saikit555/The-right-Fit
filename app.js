@@ -4,6 +4,11 @@ const wardrobeList = document.getElementById('wardrobeList');
 const imageInput = document.getElementById('image'); // New: image input
 let wardrobe = []; // Our wardrobe data
 
+// Load from localStorage if available
+const savedWardrobe = localStorage.getItem('wardrobe');
+wardrobe = savedWardrobe ? JSON.parse(savedWardrobe) : [];
+renderWardrobe(); // Render existing items on page load
+
 // Handle form submission
 form.addEventListener('submit', function (e) {
   e.preventDefault(); // Prevent form from refreshing
@@ -24,6 +29,7 @@ form.addEventListener('submit', function (e) {
     };
 
     wardrobe.push(item); // Save item to memory
+    localStorage.setItem('wardrobe', JSON.stringify(wardrobe));
     renderWardrobe();    // Show it on the screen
     form.reset();        // Clear the form
   };
