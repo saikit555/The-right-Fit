@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Right Fit</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>The Right Fit 👕</h1>
+
+    <form id="itemForm">
+      <input type="text" id="itemName" placeholder="Item Name" required />
+      <input type="text" id="brand" placeholder="Brand" />
+      <input type="text" id="size" placeholder="Size (e.g., M, 32)" />
+      <input type="number" id="price" placeholder="Price (optional)" />
+      <select id="fit">
+        <option value="">Fit Rating</option>
+        <option value="1">😣 1 - Bad Fit</option>
+        <option value="2">😐 2 - Okay</option>
+        <option value="3">🙂 3 - Decent</option>
+        <option value="4">😄 4 - Good</option>
+        <option value="5">🤩 5 - Perfect</option>
+      </select>
+      <textarea id="notes" placeholder="Notes (optional)"></textarea>
+      <button type="submit">Add Item</button>
+    </form>
+
+    <h2>My Wardrobe</h2>
+    <ul id="wardrobeList"></ul>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
