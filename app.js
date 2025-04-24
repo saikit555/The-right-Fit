@@ -1,29 +1,49 @@
+// Get form and list elements
 const form = document.getElementById('itemForm');
 const wardrobeList = document.getElementById('wardrobeList');
-let wardrobe = [];
+const imageInput = document.getElementById('image'); // New: image input
+let wardrobe = []; // Our wardrobe data
 
+// Handle form submission
 form.addEventListener('submit', function (e) {
-  e.preventDefault();
+  e.preventDefault(); // Prevent form from refreshing
 
-  const item = {
-    name: document.getElementById('itemName').value,
-    brand: document.getElementById('brand').value,
-    size: document.getElementById('size').value,
-    price: document.getElementById('price').value,
-    fit: document.getElementById('fit').value,
-    notes: document.getElementById('notes').value,
+  const file = imageInput.files[0]; // Get the selected image file
+  const reader = new FileReader();
+
+  // Once the image is loaded, create the item and store it
+  reader.onload = function () {
+    const item = {
+      name: document.getElementById('itemName').value,
+      brand: document.getElementById('brand').value,
+      size: document.getElementById('size').value,
+      price: document.getElementById('price').value,
+      fit: document.getElementById('fit').value,
+      notes: document.getElementById('notes').value,
+      image: reader.result // base64 string of the uploaded image
+    };
+
+    wardrobe.push(item); // Save item to memory
+    renderWardrobe();    // Show it on the screen
+    form.reset();        // Clear the form
   };
 
-  wardrobe.push(item);
-  renderWardrobe();
-  form.reset();
+  // If an image was uploaded, read it
+  if (file) {
+    reader.readAsDataURL(file); // Converts image to base64
+  } else {
+    reader.onload(); // No image → still save other data
+  }
 });
 
+// Display wardrobe items on the page
 function renderWardrobe() {
-  wardrobeList.innerHTML = '';
+  wardrobeList.innerHTML = ''; // Clear previous list
+
   wardrobe.forEach((item, index) => {
     const li = document.createElement('li');
     li.innerHTML = `
+      ${item.image ? `<img src="${item.image}" alt="${item.name}" style="max-width: 100%; margin-bottom: 10px;" />` : ''}
       <strong>${item.name}</strong> (${item.brand})<br>
       👕 Size: ${item.size} | Fit: ${item.fit}/5<br>
       💰 $${item.price || 'N/A'}<br>
