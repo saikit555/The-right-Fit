@@ -3,6 +3,7 @@ const form = document.getElementById('itemForm');
 const wardrobeList = document.getElementById('wardrobeList');
 const imageInput = document.getElementById('image'); // New: image input
 let wardrobe = []; // Our wardrobe data
+const reader = new FileReader();
 
 // Load from localStorage if available
 const savedWardrobe = localStorage.getItem('wardrobe');
@@ -14,7 +15,6 @@ form.addEventListener('submit', function (e) {
   e.preventDefault(); // Prevent form from refreshing
 
   const file = imageInput.files[0]; // Get the selected image file
-  const reader = new FileReader();
 
   // Once the image is loaded, create the item and store it
   reader.onload = function () {
@@ -25,7 +25,8 @@ form.addEventListener('submit', function (e) {
       price: document.getElementById('price').value,
       fit: document.getElementById('fit').value,
       notes: document.getElementById('notes').value,
-      image: reader.result // base64 string of the uploaded image
+      image: reader.result, // base64 string of the uploaded image
+      dateAdded: new Date().toISOString() // stores the added data
     };
 
     wardrobe.push(item); // Save item to memory
