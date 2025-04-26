@@ -1,4 +1,4 @@
-// Load wardrobe data from localStorage
+// Load wardrobe data
 const savedWardrobe = localStorage.getItem('wardrobe');
 const wardrobe = savedWardrobe ? JSON.parse(savedWardrobe) : [];
 
@@ -8,7 +8,7 @@ const monthlyTotals = {};
 wardrobe.forEach(item => {
   if (item.dateAdded) {
     const date = new Date(item.dateAdded);
-    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`; // Example: "2024-04"
+    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`; // Format: 2024-04
     const price = parseFloat(item.price);
     if (!isNaN(price)) {
       monthlyTotals[monthKey] = (monthlyTotals[monthKey] || 0) + price;
@@ -16,27 +16,42 @@ wardrobe.forEach(item => {
   }
 });
 
-// Display monthly spending list
+// Sort months
+const sortedMonths = Object.keys(monthlyTotals).sort();
+
+// Display monthly spending list at the top
 const monthlyList = document.getElementById('monthlySpendingList');
 
-if (Object.keys(monthlyTotals).length === 0) {
+if (sortedMonths.length === 0) {
   monthlyList.innerHTML = "<p>No spending data available yet.</p>";
 } else {
-  monthlyList.innerHTML = '<h2>Monthly Spending</h2>';
-  for (const [month, total] of Object.entries(monthlyTotals)) {
-    monthlyList.innerHTML += `<p><strong>${month}</strong>: $${total.toFixed(2)}</p>`;
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  for (const monthKey of sortedMonths) { // ✅ Use sortedMonths
+    const total = monthlyTotals[monthKey];
+    const [year, month] = monthKey.split('-');
+    const displayMonth = monthNames[parseInt(month) - 1]; // 1-based to 0-index
+
+    const div = document.createElement('div');
+    div.style = "min-width: 100px; text-align: center;";
+    div.innerHTML = `<strong>${displayMonth}</strong><br>$${total.toFixed(2)}`;
+    monthlyList.appendChild(div);
   }
 }
 
-// Create line chart for monthly spending
+// Create the line chart
 const ctx = document.getElementById('spendingChart').getContext('2d');
 const spendingChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: Object.keys(monthlyTotals),
+    labels: sortedMonths.map(monthKey => { // ✅ Use sortedMonths
+      const [year, month] = monthKey.split('-');
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      return monthNames[parseInt(month) - 1];
+    }),
     datasets: [{
-      label: 'Monthly Spending',
-      data: Object.values(monthlyTotals),
+      label: 'Spending ($)',
+      data: sortedMonths.map(monthKey => monthlyTotals[monthKey]), // ✅ Use sortedMonths
       borderColor: 'blue',
       backgroundColor: 'lightblue',
       fill: false,
@@ -47,12 +62,26 @@ const spendingChart = new Chart(ctx, {
     responsive: true,
     plugins: {
       legend: {
-        display: false
+        display: true
+      },
+      title: {
+        display: true,
+        text: 'Monthly Spending Over Time'
       }
     },
     scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Month'
+        }
+      },
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Spending ($)'
+        },
         ticks: {
           callback: function(value) {
             return '$' + value;

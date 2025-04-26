@@ -66,4 +66,24 @@ li img {
     margin-bottom: 10px;
   }
   
+  /* --- Spending Dashboard Month Cards --- */
+#monthlySpendingList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+#monthlySpendingList div {
+  flex: 1 1 120px; /* Grow and shrink nicely */
+  min-width: 100px;
+  max-width: 150px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
   

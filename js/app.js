@@ -18,6 +18,7 @@ form.addEventListener('submit', function (e) {
 
   // Once the image is loaded, create the item and store it
   reader.onload = function () {
+    const userDate = document.getElementById('fakeDate').value; //lets user choose date of input
     const item = {
       name: document.getElementById('itemName').value,
       brand: document.getElementById('brand').value,
@@ -26,7 +27,7 @@ form.addEventListener('submit', function (e) {
       fit: document.getElementById('fit').value,
       notes: document.getElementById('notes').value,
       image: reader.result, // base64 string of the uploaded image
-      dateAdded: new Date().toISOString() // stores the added data
+      dateAdded: userDate ? new Date(userDate + '-01').toISOString() : new Date().toISOString() // stores the added data with "fakedate" first or if empty use current date
     };
 
     wardrobe.push(item); // Save item to memory
