@@ -89,9 +89,19 @@ function renderWardrobe() {
 // ===============================
 // 5. Helper Functions
 // ===============================
-
 function markAsSold(index) {
   const item = wardrobe.splice(index, 1)[0];
+
+  const soldPrice = prompt("Enter sold price (optional):", "");
+  const soldReason = prompt("Enter reason for selling (optional):", "");
+
+  if (soldPrice) {
+    item.soldPrice = soldPrice;
+  }
+  if (soldReason) {
+    item.soldReason = soldReason;
+  }
+
   soldItems.push(item);
   localStorage.setItem('wardrobe', JSON.stringify(wardrobe));
   localStorage.setItem('soldItems', JSON.stringify(soldItems));
@@ -100,8 +110,17 @@ function markAsSold(index) {
 
 function markAsDisposed(index) {
   const item = wardrobe.splice(index, 1)[0];
+
+  const disposedReason = prompt("Enter reason for disposing (optional):", "");
+
+  if (disposedReason) {
+    item.disposedReason = disposedReason;
+  }
+
   disposedItems.push(item);
   localStorage.setItem('wardrobe', JSON.stringify(wardrobe));
   localStorage.setItem('disposedItems', JSON.stringify(disposedItems));
   renderWardrobe();
 }
+
+
